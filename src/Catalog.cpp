@@ -65,3 +65,12 @@ void Catalog::showAllBooks() {
                   << "---------------------------------\n";
     }
 }
+
+
+int Catalog::getBooksCount() {
+    return books.size();
+}
+
+bool Catalog::isEmpty() {
+    return books.empty();
+}

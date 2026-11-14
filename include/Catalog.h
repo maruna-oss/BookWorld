@@ -12,6 +12,8 @@ private:
 public:
     void loadFromFile(const std::string& filename);
     void showAllBooks();
+    int getBooksCount();
+    bool isEmpty();
 };
 
 #endif
