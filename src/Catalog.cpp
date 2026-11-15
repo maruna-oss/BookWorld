@@ -6,7 +6,7 @@
 void Catalog::loadFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cout << "Помилка: не вдалося відкрити файл " << filename << "\n";
+        std::cout << "Помилка: не вдалося відкрити файл.\n";
         return;
     }
 
@@ -20,7 +20,13 @@ void Catalog::loadFromFile(const std::string& filename) {
         std::getline(ss, book.title, '|');
         std::getline(ss, book.author, '|');
         std::getline(ss, book.genre, '|');
-        std::getline(ss, book.description, '|');
+        std::getline(
+
+
+
+ss, book.description, '|');
+
+        if (book.title.empty()) continue;
 
         books.push_back(book);
     }
@@ -30,28 +36,13 @@ void Catalog::loadFromFile(const std::string& filename) {
 void Catalog::showAllBooks() {
     if (books.empty()) {
         std::cout << "Каталог порожній.\n";
- 
-
-
-
-
-
-
-
-
-
-
-
-
-       return;
+            return;
     }
 
     std::cout << "\n=== КАТАЛОГ КНИГ BOOKWORLD ===\n";
     int number = 1;
     for (const auto& book : books) {
-        std::cout << number++ << ". Назва: " << book.title << "\n"
-                  << "   Автор: " << book.author << "\n"
-                  << "   Жанр:  " << book.genre << "\n"
+        std::string g = book.genre;
  
 
 
@@ -60,17 +51,45 @@ void Catalog::showAllBooks() {
 
 
 
+       if (g.empty()) g = "Не вказано";
 
-                 << "   Опис:  " << book.description << "\n"
-                  << "---------------------------------\n";
+        std::string d = book.description;
+        if (d.empty()) d = "Не вказано";
+
+        std::cout << number++ << ". Назва: " << book.title << "\n"
+
+
+
+
+
+                  << "   Автор: " << book.author << "\n"
+                  << "   Жанр:  " << g << "\n"
+                  << "   Опис:  " << d << "\n"
+               
+
+
+
+   << "---------------------------------\n";
     }
 }
 
-
 int Catalog::getBooksCount() {
+
+
+
+
+
     return books.size();
 }
 
 bool Catalog::isEmpty() {
-    return books.empty();
+ 
+
+
+
+   return books.empty();
+
 }
+
+
+

@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <string>
 #include <windows.h>
 #include "../include/Catalog.h"
 
@@ -9,21 +10,23 @@ int main() {
     Catalog catalog;
     catalog.loadFromFile("data/books.txt");
 
-    int choice = 0;
+    std::string choice;
     while (true) {
         std::cout << "\n--- Вітаємо у BookWorld ---\n";
         std::cout << "1. Переглянути каталог книг\n";
         std::cout << "0. Вихід\n";
         std::cout << "Оберіть дію: ";
-        std::cin >> choice;
+        std::getline(std::cin, choice);
 
-        if (choice == 1) {
+        if (choice ==
+
+ "1") {
             catalog.showAllBooks();
-        } else if (choice == 0) {
-            std::cout << "Роботу завершено. До зустрічі!\n";
+        } else if (choice == "0") {
+            std::cout << "Роботу завершено.\n";
             break;
         } else {
-            std::cout << "Невірний вибір. Спробуйте ще раз.\n";
+            std::cout << "Невірний вибір.\n";
         }
     }
 
