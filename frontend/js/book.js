@@ -17,8 +17,12 @@ async function loadBookDetails() {
 
     const genreText = book.genre ? book.genre : "Не вказано";
     const descText = book.description ? book.description : "Опис відсутній.";
+    const coverHtml = book.cover
+        ? "<img src=\"" + book.cover + "\" alt='" + book.title + "' class='book-cover' style='max-width: 240px; height: 300px;'>"
+        : "<div class='book-cover-placeholder' style='max-width: 240px; height: 220px;'>📖</div>";
 
     container.innerHTML =
+        coverHtml +
         "<h1 style='color: #172a45; margin-bottom: 8px;'>" + book.title + "</h1>" +
         "<p style='font-size: 18px; color: #4b5563; margin-bottom: 14px;'><strong>Автор:</strong> " + book.author + "</p>" +
         "<span class='genre-badge'>" + genreText + "</span>" +

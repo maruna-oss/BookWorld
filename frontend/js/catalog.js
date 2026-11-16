@@ -12,12 +12,17 @@ function renderBooks(books) {
         return;
     }
 
-   books.forEach(book => {
+  books.forEach(book => {
         const card = document.createElement("div");
         card.className = "book-card";
         const genreText = book.genre ? book.genre : "Не вказано";
+        const coverHtml = book.cover
+            ? "<img src=\"" + book.cover + "\" alt='" + book.title + "' class='book-cover'>"
+            : "<div class='book-cover-placeholder'>📖</div>";
+
         card.innerHTML =
             "<div>" +
+                coverHtml +
                 "<h3>" + book.title + "</h3>" +
                 "<p class='book-author'>" + book.author + "</p>" +
                 "<span class='genre-badge'>" + genreText + "</span>" +
