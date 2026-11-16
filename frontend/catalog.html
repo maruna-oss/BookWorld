@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог книг — BookWorld</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">📚 BookWorld</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Головна</a></li>
+                    <li><a href="catalog.html" class="active">Каталог книг</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="mode-banner" class="test-banner">
+            ⚠️ Тестовий режим: відображаються локальні дані до підключення Backend API.
+        </div>
+
+        <h1 style="margin-top: 24px; color: #172a45;">Каталог книг</h1>
+
+        <div class="controls">
+            <input type="text" id="search-input" placeholder="🔍 Пошук за назвою або автором...">
+            <select id="genre-select">
+                <option value="all">Усі жанри</option>
+            </select>
+        </div>
+
+        <div id="books-container" class="books-grid"></div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/catalog.js"></script>
+</body>
+</html>
