@@ -21,12 +21,39 @@
     </header>
 
     <main class="container">
+        <!-- Попередження про роботу в тестовому режимі до запуску Backend -->
         <div id="mode-banner" class="test-banner">
-            ⚠️ Тестовий режим: відображаються локальні дані до підключення Backend API.
+            ⚠️ Тестовий режим: зміни зберігаються локально в браузері до підключення C++ Backend API.
         </div>
+
+        <!-- Блок для повідомлень про успіх або помилку (додавання, оновлення, видалення) -->
+        <div id="status-message" class="status-message"></div>
+
+        <!-- Форма додавання та редагування книги -->
+        <section class="manage-box">
+            <h2 id="form-title">Додати нову книгу</h2>
+            <form id="book-form">
+                <!-- Приховане поле: зберігає id книги під час редагування -->
+                <input type="hidden" id="book-id">
+
+                <div class="form-grid">
+                    <input type="text" id="book-title" placeholder="Назва книги *" required>
+                    <input type="text" id="book-author" placeholder="Автор *" required>
+                    <input type="text" id="book-genre" placeholder="Жанр (наприклад, Поезія)">
+                    <input type="text" id="book-cover" placeholder="Посилання на обкладинку (необов'язково)">
+                    <textarea id="book-description" placeholder="Короткий опис книги"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="submit-btn" class="btn">Додати книгу</button>
+                    <button type="button" id="cancel-btn" class="btn btn-secondary" style="display: none;">Скасувати</button>
+                </div>
+            </form>
+        </section>
 
         <h1 style="margin-top: 24px; color: #172a45;">Каталог книг</h1>
 
+        <!-- Пошук за назвою/автором та фільтр за жанрами -->
         <div class="controls">
             <input type="text" id="search-input" placeholder="🔍 Пошук за назвою або автором...">
             <select id="genre-select">
@@ -34,6 +61,7 @@
             </select>
         </div>
 
+        <!-- Сітка карток книг -->
         <div id="books-container" class="books-grid"></div>
     </main>
 
