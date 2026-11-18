@@ -119,7 +119,7 @@ async function createBook(bookData) {
         throw new Error("Помилка під час додавання книги");
     }
     return await response.json();
-}// 4. Оновити існуючу книгу (PUT /api/books/{id})
+// 4. Оновити існуючу книгу (PUT /api/books/{id})
 async function updateBook(id, bookData) {
     if (USE_MOCK_DATA) {
         const books = getLocalBooks();
@@ -127,13 +127,17 @@ async function updateBook(id, bookData) {
         if (index === -1) {
             throw new Error("Книгу для редагування не знайдено");
         }
+        const updatedCover = bookData.cover
+            ? bookData.cover
+            : makeCover(bookData.title, bookData.author, "#1e3a8a");
+
         books[index] = {
             ...books[index],
             title: bookData.title,
             author: bookData.author,
             genre: bookData.genre,
             description: bookData.description,
-            cover: bookData.cover || books[index].cover
+            cover: updatedCover
         };
         saveLocalBooks(books);
         return books[index];
@@ -148,7 +152,6 @@ async function updateBook(id, bookData) {
     }
     return await response.json();
 }
-
 // 5. Видалити книгу за її id (DELETE /api/books/{id})
 async function deleteBook(id) {
     if (USE_MOCK_DATA) {
@@ -164,4 +167,5 @@ async function deleteBook(id) {
         throw new Error("Помилка під час видалення книги");
     }
     return true;
+}
 }

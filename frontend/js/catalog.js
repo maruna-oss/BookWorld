@@ -30,37 +30,90 @@ function showMessage(text, isError) {
     }, 4000);
 }
 
-// Малює картки книг на сторінці
+// Перевіряє, чи безпечне посилання на обкладинку
+function isValidCoverUrl(url) {
+    if (!url || typeof url !== "string") return false;
+    return ["http://", "https://", "data:image/"].some(p => url.startsWith(p));
+}
+
+// Безпечно створює картки книг через DOM-елементи (захист від лапок і HTML-коду)
 function renderBooks(books) {
     booksContainer.innerHTML = "";
 
     if (books.length === 0) {
-        booksContainer.innerHTML = "<p>Книг за вашим запитом не знайдено.</p>";
+        const emptyMsg = document.createElement("p");
+        emptyMsg.textContent = "Книг за вашим запитом не знайдено.";
+        booksContainer.appendChild(emptyMsg);
         return;
     }
 
     books.forEach(function (book) {
         const card = document.createElement("div");
         card.className = "book-card";
-        const genreText = book.genre ? book.genre : "Не вказано";
-        const coverHtml = book.cover
-            ? "<img src=\"" + book.cover + "\" alt='" + book.title + "' class='book-cover'>"
-            : "<div class='book-cover-placeholder'>📖</div>";
 
-        card.innerHTML =
-            "<div>" +
-                coverHtml +
-                "<h3>" + book.title + "</h3>" +
-                "<p class='book-author'>" + book.author + "</p>" +
-                "<span class='genre-badge'>" + genreText + "</span>" +
-            "</div>" +
-            "<div class='card-actions'>" +
-                "<a href='book.html?id=" + book.id + "' class='btn' style='text-align: center;'>Детальніше</a>" +
-                "<div class='card-actions-row'>" +
-                    "<button type='button' class='btn btn-secondary' onclick='startEditBook(" + book.id + ")'>Редагувати</button>" +
-                    "<button type='button' class='btn btn-danger' onclick='handleDeleteBook(" + book.id + ")'>Видалити</button>" +
-                "</div>" +
-            "</div>";
+        const infoDiv = document.createElement("div");
+
+        if (isValidCoverUrl(book.cover)) {
+            const img = document.createElement("img");
+            img.src = book.cover;
+            img.alt = book.title;
+            img.className = "book-cover";
+            infoDiv.appendChild(img);
+        } else {
+            const placeholder = document.createElement("div");
+            placeholder.className = "book-cover-placeholder";
+            placeholder.textContent = "📖";
+            infoDiv.appendChild(placeholder);
+        }
+
+        const h3 = document.createElement("h3");
+        h3.textContent = book.title;
+        infoDiv.appendChild(h3);
+
+        const authorP = document.createElement("p");
+        authorP.className = "book-author";
+        authorP.textContent = book.author;
+        infoDiv.appendChild(authorP);
+
+        const genreSpan = document.createElement("span");
+        genreSpan.className = "genre-badge";
+        genreSpan.textContent = book.genre ? book.genre : "Не вказано";
+        infoDiv.appendChild(genreSpan);
+
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "card-actions";
+
+        const detailsLink = document.createElement("a");
+        detailsLink.href = "book.html?id=" + encodeURIComponent(book.id);
+        detailsLink.className = "btn";
+        detailsLink.style.textAlign = "center";
+        detailsLink.textContent = "Детальніше";
+        actionsDiv.appendChild(detailsLink);
+
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "card-actions-row";
+
+        const editBtn = document.createElement("button");
+        editBtn.type = "button";
+        editBtn.className = "btn btn-secondary";
+        editBtn.textContent = "Редагувати";
+        editBtn.addEventListener("click", function () {
+            startEditBook(book.id);
+        });
+        rowDiv.appendChild(editBtn);
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.className = "btn btn-danger";
+        deleteBtn.textContent = "Видалити";
+        deleteBtn.addEventListener("click", function () {
+            handleDeleteBook(book.id);
+        });
+        rowDiv.appendChild(deleteBtn);
+
+        actionsDiv.appendChild(rowDiv);
+        card.appendChild(infoDiv);
+        card.appendChild(actionsDiv);
         booksContainer.appendChild(card);
     });
 }
@@ -167,13 +220,20 @@ async function handleDeleteBook(id) {
     }
 }
 
-// Перезавантажує актуальний список книг і оновлює сторінку
+// Перезавантажує список книг із обробкою помилок мережі (try...catch)
 async function refreshCatalog() {
-    allBooks = await fetchAllBooks();
-    populateGenres(allBooks);
-    filterBooks();
+    try {
+        allBooks = await fetchAllBooks();
+        populateGenres(allBooks);
+        filterBooks();
+    } catch (error) {
+        booksContainer.innerHTML = "";
+        const errP = document.createElement("p");
+        errP.textContent = "Не вдалося завантажити каталог книг. Перевірте підключення до сервера.";
+        booksContainer.appendChild(errP);
+        showMessage("Помилка мережі: сервер недоступний.", true);
+    }
 }
-
 // Запуск усіх обробників при відкритті сторінки
 async function initCatalog() {
     await refreshCatalog();
